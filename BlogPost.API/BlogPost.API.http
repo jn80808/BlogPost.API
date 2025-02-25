@@ -20,7 +20,7 @@ POST {{BlogPost.API_HostAddress}}/api/blogcategory
 Content-Type: application/json
 
 {
-  "name": "Skin Care",
-  "urlHandle": "https//Beauty",
-  "description": "Beauty"
+  "name": "S",
+  "urlHandle": "https//s",
+  "description": "s"
 }
