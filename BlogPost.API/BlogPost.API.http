@@ -1,0 +1,5 @@
+﻿@BlogPost.API_HostAddress = https://localhost:7008
+
+GET {{BlogPost.API_HostAddress}}/api/blogcategory
+
+###
