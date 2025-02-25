@@ -55,7 +55,7 @@ namespace BlogPost.API.Controllers
 
         // POST: api/BlogCategory
         [HttpPost]
-        public async Task<ActionResult<BlogCategoryDTO>> CreateCategory([FromBody] BlogCategoryDTO dto)
+        public async Task<ActionResult<BlogCategoryDTO>> CreateCategory([FromBody] CreateBlogCategoryDTO createBlogCategoryDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -65,22 +65,22 @@ namespace BlogPost.API.Controllers
             var category = new BlogCategory
             {
                 Id = Guid.NewGuid(),
-                Name = dto.Name,
-                UrlHandle = dto.UrlHandle,
-                Description = dto.Description
+                Name = createBlogCategoryDTO.Name,
+                UrlHandle = createBlogCategoryDTO.UrlHandle,
+                Description = createBlogCategoryDTO.Description
             };
 
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, dto);
+            return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, createBlogCategoryDTO);
         }
 
         // PUT: api/BlogCategory/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] BlogCategoryDTO dto)
+        public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateBlogCategoryDTO updateBlogCategoryDTO)
         {
-            if (id != dto.Id)
+            if (id != updateBlogCategoryDTO.Id)
             {
                 return BadRequest(new { message = "ID mismatch." });
             }
@@ -96,9 +96,9 @@ namespace BlogPost.API.Controllers
                 return NotFound(new { message = "Category not found." });
             }
 
-            category.Name = dto.Name;
-            category.UrlHandle = dto.UrlHandle;
-            category.Description = dto.Description;
+            category.Name = updateBlogCategoryDTO.Name;
+            category.UrlHandle = updateBlogCategoryDTO.UrlHandle;
+            category.Description = updateBlogCategoryDTO.Description;
 
             await _context.SaveChangesAsync();
 

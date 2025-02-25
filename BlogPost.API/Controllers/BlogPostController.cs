@@ -81,7 +81,7 @@ namespace BlogPost.API.Controllers
 
             var blogPost = new BlogPostT
             {
-                Id = Guid.NewGuid(),
+                //Id = Guid.NewGuid(),
                 Title = dto.Title,
                 ShortDescription = dto.ShortDescription,
                 Content = dto.Content,
