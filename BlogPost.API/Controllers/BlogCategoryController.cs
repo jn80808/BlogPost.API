@@ -3,6 +3,7 @@ using BlogPost.API.DTOs;
 using BlogPost.API.Model.Domain;
 using Microsoft.EntityFrameworkCore;
 using BlogPostSystem;
+using BlogPost.API.Model.DTO;
 
 namespace BlogPost.API.Controllers
 {
@@ -55,16 +56,26 @@ namespace BlogPost.API.Controllers
 
         // POST: api/BlogCategory
         [HttpPost]
-        public async Task<ActionResult<BlogCategoryDTO>> CreateCategory([FromBody] CreateBlogCategoryDTO createBlogCategoryDTO)
+        public async Task<ActionResult<CreateCategoryReturnDto>> CreateCategory([FromBody] CreateBlogCategoryDTO createBlogCategoryDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            // Check if Name or Description already exists in the database
+            bool categoryExists = await _context.Categories.AnyAsync(c =>
+                c.Name == createBlogCategoryDTO.Name ||
+                c.Description == createBlogCategoryDTO.Description);
+
+            if (categoryExists)
+            {
+                return BadRequest("A category with the same Name or Description already exists.");
+            }
+
+            // Map DTO to Domain Model
             var category = new BlogCategory
             {
-                Id = Guid.NewGuid(),
                 Name = createBlogCategoryDTO.Name,
                 UrlHandle = createBlogCategoryDTO.UrlHandle,
                 Description = createBlogCategoryDTO.Description
@@ -73,7 +84,16 @@ namespace BlogPost.API.Controllers
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, createBlogCategoryDTO);
+            // Map Domain Model to Response DTO
+            var response = new CreateCategoryReturnDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle,
+                Description = category.Description
+            };
+
+            return Ok(response);
         }
 
         // PUT: api/BlogCategory/{id}

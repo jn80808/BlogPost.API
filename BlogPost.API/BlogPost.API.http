@@ -4,3 +4,23 @@ GET {{BlogPost.API_HostAddress}}/api/blogcategory
 
 ###
 
+
+POST {{BlogPost.API_HostAddress}}/api/blogcategory
+Content-Type: application/json
+
+{
+  "Name":"J",
+  "UrlHandle":"https//kkk",
+  "Description":"yeyeyye"
+}
+
+###
+
+POST {{BlogPost.API_HostAddress}}/api/blogcategory
+Content-Type: application/json
+
+{
+  "name": "Skin Care",
+  "urlHandle": "https//Beauty",
+  "description": "Beauty"
+}
