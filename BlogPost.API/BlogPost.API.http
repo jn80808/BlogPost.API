@@ -20,7 +20,9 @@ POST {{BlogPost.API_HostAddress}}/api/blogcategory
 Content-Type: application/json
 
 {
-  "name": "S",
+  "name": "Hardware",
   "urlHandle": "https//s",
-  "description": "s"
+  "description": "Hardware"
 }
+
+

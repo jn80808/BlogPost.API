@@ -1,3 +1,5 @@
+using BlogPost.API.Repository.Implementation;
+using BlogPost.API.Repository.Interface;
 using BlogPostSystem;  
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +11,9 @@ builder.Services.AddDbContext<BlogPostDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Added Repository 
+builder.Services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
 
 var app = builder.Build();
 

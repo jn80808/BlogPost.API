@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BlogPost.API.DTOs;
 using BlogPost.API.Model.Domain;
-using Microsoft.EntityFrameworkCore;
-using BlogPostSystem;
+using BlogPost.API.Repository.Interface;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using BlogPost.API.Model.DTO;
 
 namespace BlogPost.API.Controllers
@@ -11,35 +12,39 @@ namespace BlogPost.API.Controllers
     [ApiController]
     public class BlogCategoryController : ControllerBase
     {
-        private readonly BlogPostDbContext _context;
+        private readonly IBlogCategoryRepository _blogCategoryRepository;
 
-        public BlogCategoryController(BlogPostDbContext context)
+        public BlogCategoryController(IBlogCategoryRepository blogCategoryRepository)
         {
-            _context = context;
+            _blogCategoryRepository = blogCategoryRepository;
         }
 
         // GET: api/BlogCategory
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories()
         {
-            var categories = await _context.Categories
-                .Select(c => new BlogCategoryDTO
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    UrlHandle = c.UrlHandle,
-                    Description = c.Description
-                })
-                .ToListAsync();
+            var categories = await _blogCategoryRepository.GetAllAsync();
+            if (!categories.Any())
+            {
+                return NotFound(new { message = "No categories found." });
+            }
 
-            return Ok(categories);
+            var categoryDtos = categories.Select(c => new BlogCategoryDTO
+            {
+                Id = c.Id,
+                Name = c.Name,
+                UrlHandle = c.UrlHandle,
+                Description = c.Description
+            }).ToList();
+
+            return Ok(categoryDtos);
         }
 
         // GET: api/BlogCategory/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogCategoryDTO>> GetCategory(Guid id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _blogCategoryRepository.GetByIdAsync(id);
             if (category == null)
             {
                 return NotFound(new { message = "Category not found." });
@@ -63,10 +68,8 @@ namespace BlogPost.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Check if Name or Description already exists in the database
-            bool categoryExists = await _context.Categories.AnyAsync(c =>
-                c.Name == createBlogCategoryDTO.Name ||
-                c.Description == createBlogCategoryDTO.Description);
+            // Check if Name or Description already exists using Repository
+            bool categoryExists = await _blogCategoryRepository.ExistsAsync(createBlogCategoryDTO.Name, createBlogCategoryDTO.Description);
 
             if (categoryExists)
             {
@@ -81,24 +84,24 @@ namespace BlogPost.API.Controllers
                 Description = createBlogCategoryDTO.Description
             };
 
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            var createdCategory = await _blogCategoryRepository.CreateAsync(category);
 
             // Map Domain Model to Response DTO
             var response = new CreateCategoryReturnDto
             {
-                Id = category.Id,
-                Name = category.Name,
-                UrlHandle = category.UrlHandle,
-                Description = category.Description
+                Id = createdCategory.Id,
+                Name = createdCategory.Name,
+                UrlHandle = createdCategory.UrlHandle,
+                Description = createdCategory.Description
             };
 
-            return Ok(response);
+            return CreatedAtAction(nameof(GetCategory), new { id = response.Id }, response);
         }
+
 
         // PUT: api/BlogCategory/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateBlogCategoryDTO updateBlogCategoryDTO)
+        public async Task<ActionResult<BlogCategoryDTO>> UpdateCategory(Guid id, [FromBody] UpdateBlogCategoryDTO updateBlogCategoryDTO)
         {
             if (id != updateBlogCategoryDTO.Id)
             {
@@ -110,35 +113,40 @@ namespace BlogPost.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var category = new BlogCategory
+            {
+                Id = id,
+                Name = updateBlogCategoryDTO.Name,
+                UrlHandle = updateBlogCategoryDTO.UrlHandle,
+                Description = updateBlogCategoryDTO.Description
+            };
+
+            var updatedCategory = await _blogCategoryRepository.UpdateAsync(category);
+            if (updatedCategory == null)
             {
                 return NotFound(new { message = "Category not found." });
             }
 
-            category.Name = updateBlogCategoryDTO.Name;
-            category.UrlHandle = updateBlogCategoryDTO.UrlHandle;
-            category.Description = updateBlogCategoryDTO.Description;
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(new BlogCategoryDTO
+            {
+                Id = updatedCategory.Id,
+                Name = updatedCategory.Name,
+                UrlHandle = updatedCategory.UrlHandle,
+                Description = updatedCategory.Description
+            });
         }
 
         // DELETE: api/BlogCategory/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(Guid id)
+        public async Task<ActionResult> DeleteCategory(Guid id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var isDeleted = await _blogCategoryRepository.DeleteAsync(id);
+            if (!isDeleted)
             {
                 return NotFound(new { message = "Category not found." });
             }
 
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(new { message = "Category deleted successfully." });
         }
     }
 }
