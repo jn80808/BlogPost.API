@@ -17,6 +17,9 @@ builder.Services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
 
 var app = builder.Build();
 
+
+
+//Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -24,6 +27,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyOrigin();
+    options.AllowAnyMethod();
+});
+
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
