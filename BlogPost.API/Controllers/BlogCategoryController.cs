@@ -29,6 +29,7 @@ namespace BlogPost.API.Controllers
                 return NotFound(new { message = "No categories found." });
             }
 
+            // Map Domain Model to DTO 
             var categoryDtos = categories.Select(c => new BlogCategoryDTO
             {
                 Id = c.Id,

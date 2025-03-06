@@ -26,3 +26,11 @@ Content-Type: application/json
 }
 
 
+
+GET {{BlogPost.API_HostAddress}}/api/blogcategory
+
+###
+
+GET {{BlogPost.API_HostAddress}}/api/blogcategory
+
+###
