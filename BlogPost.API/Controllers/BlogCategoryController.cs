@@ -43,7 +43,7 @@ namespace BlogPost.API.Controllers
 
         // GET: api/BlogCategory/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogCategoryDTO>> GetCategory(Guid id)
+        public async Task<ActionResult<BlogCategoryDTO>> GetCategory([FromRoute]Guid id)
         {
             var category = await _blogCategoryRepository.GetByIdAsync(id);
             if (category == null)
@@ -51,13 +51,15 @@ namespace BlogPost.API.Controllers
                 return NotFound(new { message = "Category not found." });
             }
 
-            return Ok(new BlogCategoryDTO
+            var response = new BlogCategoryDTO
             {
                 Id = category.Id,
                 Name = category.Name,
                 UrlHandle = category.UrlHandle,
                 Description = category.Description
-            });
+            };
+
+            return Ok(response);
         }
 
         // POST: api/BlogCategory
@@ -102,7 +104,8 @@ namespace BlogPost.API.Controllers
 
         // PUT: api/BlogCategory/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult<BlogCategoryDTO>> UpdateCategory(Guid id, [FromBody] UpdateBlogCategoryDTO updateBlogCategoryDTO)
+        [Route("{id:Guid}")]
+        public async Task<ActionResult<BlogCategoryDTO>> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateBlogCategoryDTO updateBlogCategoryDTO)
         {
             if (id != updateBlogCategoryDTO.Id)
             {
@@ -128,13 +131,15 @@ namespace BlogPost.API.Controllers
                 return NotFound(new { message = "Category not found." });
             }
 
-            return Ok(new BlogCategoryDTO
+            var response = new BlogCategoryDTO
             {
                 Id = updatedCategory.Id,
                 Name = updatedCategory.Name,
                 UrlHandle = updatedCategory.UrlHandle,
                 Description = updatedCategory.Description
-            });
+            };
+
+            return Ok(response);
         }
 
         // DELETE: api/BlogCategory/{id}

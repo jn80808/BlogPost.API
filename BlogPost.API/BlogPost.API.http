@@ -34,3 +34,20 @@ GET {{BlogPost.API_HostAddress}}/api/blogcategory
 GET {{BlogPost.API_HostAddress}}/api/blogcategory
 
 ###
+
+PUT {{BlogPost.API_HostAddress}}/api/blogcategory/fcc0a3fb-1136-4704-f0ac-08dd567d7cd6
+Content-Type: application/json
+
+{
+   "id": "fcc0a3fb-1136-4704-f0ac-08dd567d7cd6",
+   "name": "Hardwares1",
+   "urlHandle": "https://s1s",
+   "description": "Hardwares1"
+}
+
+
+###
+
+GET {{BlogPost.API_HostAddress}}/api/blogcategory
+
+###
