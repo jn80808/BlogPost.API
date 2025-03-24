@@ -144,7 +144,7 @@ namespace BlogPost.API.Controllers
 
         // DELETE: api/BlogCategory/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCategory(Guid id)
+        public async Task<ActionResult> DeleteCategory([FromRoute] Guid id)
         {
             var isDeleted = await _blogCategoryRepository.DeleteAsync(id);
             if (!isDeleted)
