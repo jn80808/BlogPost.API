@@ -103,8 +103,7 @@ namespace BlogPost.API.Controllers
 
 
         // PUT: api/BlogCategory/{id}
-        [HttpPut("{id}")]
-        [Route("{id:Guid}")]
+        [HttpPut("{id:Guid}")] // Correcting the route definition
         public async Task<ActionResult<BlogCategoryDTO>> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateBlogCategoryDTO updateBlogCategoryDTO)
         {
             if (id != updateBlogCategoryDTO.Id)
@@ -141,6 +140,7 @@ namespace BlogPost.API.Controllers
 
             return Ok(response);
         }
+
 
         // DELETE: api/BlogCategory/{id}
         [HttpDelete("{id}")]
