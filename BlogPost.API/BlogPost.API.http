@@ -51,3 +51,7 @@ Content-Type: application/json
 GET {{BlogPost.API_HostAddress}}/api/blogcategory
 
 ###
+
+DELETE {{BlogPost.API_HostAddress}}/api/blogcategory/16221adb-23f0-4a54-f05c-08dd5a68e162
+
+###
