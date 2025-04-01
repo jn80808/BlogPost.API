@@ -43,7 +43,7 @@ namespace BlogPost.API.Controllers
 
         // GET: api/BlogPost/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogPostDTO>> GetBlogPost(Guid id)
+        public async Task<ActionResult<BlogPostDTO>> GetBlogPost([FromRoute] Guid id)
         {
             var blogPost = await _blogPostRepository.GetByIdAsync(id);
             if (blogPost == null)
@@ -117,7 +117,7 @@ namespace BlogPost.API.Controllers
 
         // PUT: api/BlogPost/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBlogPost(Guid id, [FromBody] UpdateBlogPostDTO dto)
+        public async Task<IActionResult> UpdateBlogPost([FromRoute]  Guid id, [FromBody] UpdateBlogPostDTO dto)
         {
             // Check if the model state is valid
             if (!ModelState.IsValid)
@@ -157,7 +157,7 @@ namespace BlogPost.API.Controllers
 
         // DELETE: api/BlogPost/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBlogPost(Guid id)
+        public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
         {
             // Call the repository to delete the blog post
             var result = await _blogPostRepository.DeleteAsync(id);
