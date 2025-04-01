@@ -14,7 +14,7 @@ namespace BlogPost.API.Model.Domain
         public string UrlHandle { get; set; } = string.Empty;
 
         public DateTime? PublishedDate { get; set; } // Nullable DateTime
-        public bool IsVisible { get; set; } = false; // Changed to boolean
+        public bool IsVisible { get; set; } = false; // 
 
         public Guid? CategoryId { get; set; } // Nullable Foreign Key
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

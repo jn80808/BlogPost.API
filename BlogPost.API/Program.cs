@@ -1,3 +1,4 @@
+using BlogPost.API.Repositories;
 using BlogPost.API.Repository.Implementation;
 using BlogPost.API.Repository.Interface;
 using BlogPostSystem;  
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen();
 
 //Added Repository 
 builder.Services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+
 
 var app = builder.Build();
 

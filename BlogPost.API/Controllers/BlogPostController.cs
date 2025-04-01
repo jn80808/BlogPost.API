@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BlogPost.API.DTOs;
 using BlogPost.API.Model.Domain;
-using Microsoft.EntityFrameworkCore;
-using BlogPostSystem;
+using BlogPost.API.Repositories;
 
 namespace BlogPost.API.Controllers
 {
@@ -10,50 +9,49 @@ namespace BlogPost.API.Controllers
     [ApiController]
     public class BlogPostController : ControllerBase
     {
-        private readonly BlogPostDbContext _context;
+        private readonly IBlogPostRepository _blogPostRepository;
 
-        public BlogPostController(BlogPostDbContext context)
+        // Constructor now accepts IBlogPostRepository instead of DbContext
+        public BlogPostController(IBlogPostRepository blogPostRepository)
         {
-            _context = context;
+            _blogPostRepository = blogPostRepository;
         }
 
         // GET: api/BlogPost
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetBlogPosts()
         {
-            var blogPosts = await _context.BlogPosts
-                .Select(bp => new BlogPostDTO
-                {
-                    Id = bp.Id,
-                    Title = bp.Title,
-                    ShortDescription = bp.ShortDescription,
-                    Content = bp.Content,
-                    FeatureImageUrl = bp.FeatureImageUrl,
-                    AuthorName = bp.AuthorName,
-                    UrlHandle = bp.UrlHandle,
-                    PublishedDate = bp.PublishedDate,
-                    IsVisible = bp.IsVisible,
-                    IsPublished = bp.IsPublished,
-                    CategoryId = bp.CategoryId,
-                    CreatedAt = bp.CreatedAt
-                })
-                .ToListAsync();
+            var blogPosts = await _blogPostRepository.GetAllAsync();
+            var response = blogPosts.Select(bp => new BlogPostDTO
+            {
+                Id = bp.Id,
+                Title = bp.Title,
+                ShortDescription = bp.ShortDescription,
+                Content = bp.Content,
+                FeatureImageUrl = bp.FeatureImageUrl,
+                AuthorName = bp.AuthorName,
+                UrlHandle = bp.UrlHandle,
+                PublishedDate = bp.PublishedDate,
+                IsVisible = bp.IsVisible,
+                IsPublished = bp.IsPublished,
+                CategoryId = bp.CategoryId,
+                CreatedAt = bp.CreatedAt
+            }).ToList();
 
-            return Ok(blogPosts);
+            return Ok(response);
         }
 
         // GET: api/BlogPost/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogPostDTO>> GetBlogPost(Guid id)
         {
-            var blogPost = await _context.BlogPosts.FindAsync(id);
-
+            var blogPost = await _blogPostRepository.GetByIdAsync(id);
             if (blogPost == null)
             {
                 return NotFound(new { message = "Blog post not found." });
             }
 
-            return Ok(new BlogPostDTO
+            var response = new BlogPostDTO
             {
                 Id = blogPost.Id,
                 Title = blogPost.Title,
@@ -67,7 +65,9 @@ namespace BlogPost.API.Controllers
                 IsPublished = blogPost.IsPublished,
                 CategoryId = blogPost.CategoryId,
                 CreatedAt = blogPost.CreatedAt
-            });
+            };
+
+            return Ok(response);
         }
 
         // POST: api/BlogPost
@@ -81,7 +81,6 @@ namespace BlogPost.API.Controllers
 
             var blogPost = new BlogPostT
             {
-                //Id = Guid.NewGuid(),
                 Title = dto.Title,
                 ShortDescription = dto.ShortDescription,
                 Content = dto.Content,
@@ -95,55 +94,84 @@ namespace BlogPost.API.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.BlogPosts.Add(blogPost);
-            await _context.SaveChangesAsync();
+            var createdBlogPost = await _blogPostRepository.AddAsync(blogPost);
 
-            return CreatedAtAction(nameof(GetBlogPost), new { id = blogPost.Id }, new BlogPostDTO
+            var response = new BlogPostDTO
             {
-                Id = blogPost.Id,
-                Title = blogPost.Title,
-                ShortDescription = blogPost.ShortDescription,
-                Content = blogPost.Content,
-                FeatureImageUrl = blogPost.FeatureImageUrl,
-                AuthorName = blogPost.AuthorName,
-                UrlHandle = blogPost.UrlHandle,
-                PublishedDate = blogPost.PublishedDate,
-                IsVisible = blogPost.IsVisible,
-                IsPublished = blogPost.IsPublished,
-                CategoryId = blogPost.CategoryId,
-                CreatedAt = blogPost.CreatedAt
-            });
+                Id = createdBlogPost.Id,
+                Title = createdBlogPost.Title,
+                ShortDescription = createdBlogPost.ShortDescription,
+                Content = createdBlogPost.Content,
+                FeatureImageUrl = createdBlogPost.FeatureImageUrl,
+                AuthorName = createdBlogPost.AuthorName,
+                UrlHandle = createdBlogPost.UrlHandle,
+                PublishedDate = createdBlogPost.PublishedDate,
+                IsVisible = createdBlogPost.IsVisible,
+                IsPublished = createdBlogPost.IsPublished,
+                CategoryId = createdBlogPost.CategoryId,
+                CreatedAt = createdBlogPost.CreatedAt
+            };
+
+            return CreatedAtAction(nameof(GetBlogPost), new { id = response.Id }, response);
         }
 
         // PUT: api/BlogPost/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBlogPost(Guid id, [FromBody] UpdateBlogPostDTO dto)
         {
-            var blogPost = await _context.BlogPosts.FindAsync(id);
-            if (blogPost == null)
-            {
-                return NotFound(new { message = "Blog post not found." });
-            }
-
+            // Check if the model state is valid
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            blogPost.Title = dto.Title;
-            blogPost.ShortDescription = dto.ShortDescription;
-            blogPost.Content = dto.Content;
-            blogPost.FeatureImageUrl = dto.FeatureImageUrl;
-            blogPost.AuthorName = dto.AuthorName;
-            blogPost.UrlHandle = dto.UrlHandle;
-            blogPost.PublishedDate = dto.PublishedDate;
-            blogPost.IsVisible = dto.IsVisible;
-            blogPost.IsPublished = dto.IsPublished;
-            blogPost.CategoryId = dto.CategoryId;
+            // Call the repository to update the blog post
+            var updatedBlogPost = await _blogPostRepository.UpdateAsync(id, dto);
 
-            await _context.SaveChangesAsync();
+            // If the blog post wasn't found, return NotFound
+            if (updatedBlogPost == null)
+            {
+                return NotFound(new { message = "Blog post not found." });
+            }
 
-            return NoContent();
+            // Create the updated BlogPostDTO
+            var response = new BlogPostDTO
+            {
+                Id = updatedBlogPost.Id,
+                Title = updatedBlogPost.Title,
+                ShortDescription = updatedBlogPost.ShortDescription,
+                Content = updatedBlogPost.Content,
+                FeatureImageUrl = updatedBlogPost.FeatureImageUrl,
+                AuthorName = updatedBlogPost.AuthorName,
+                UrlHandle = updatedBlogPost.UrlHandle,
+                PublishedDate = updatedBlogPost.PublishedDate,
+                IsVisible = updatedBlogPost.IsVisible,
+                IsPublished = updatedBlogPost.IsPublished,
+                CategoryId = updatedBlogPost.CategoryId,
+                CreatedAt = updatedBlogPost.CreatedAt
+            };
+
+            // Return a success message along with the updated data
+            return Ok(new { message = "Successfully updated", response });
         }
+
+        // DELETE: api/BlogPost/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBlogPost(Guid id)
+        {
+            // Call the repository to delete the blog post
+            var result = await _blogPostRepository.DeleteAsync(id);
+
+            // If the blog post was not found, return NotFound
+            if (!result)
+            {
+                return NotFound(new { message = "Blog post not found." });
+            }
+
+            // Return a success message after successful deletion
+            return Ok(new { message = "Blog post successfully deleted." });
+        }
+
+
     }
 }

@@ -55,3 +55,73 @@ GET {{BlogPost.API_HostAddress}}/api/blogcategory
 DELETE {{BlogPost.API_HostAddress}}/api/blogcategory/16221adb-23f0-4a54-f05c-08dd5a68e162
 
 ###
+
+GET {{BlogPost.API_HostAddress}}/api/comment/{id}
+
+###
+
+GET {{BlogPost.API_HostAddress}}/api/blogpost
+
+###
+
+GET {{BlogPost.API_HostAddress}}/api/blogcategory
+
+###
+
+GET {{BlogPost.API_HostAddress}}/api/blogpost/c61c1404-7b2f-4b2f-ea0a-08dd712fbf92
+
+###
+
+POST {{BlogPost.API_HostAddress}}/api/blogpost
+Content-Type: application/json
+
+{
+  "title": "The Future of AI2",
+  "shortDescription": "Exploring AI",
+  "content": "AI is evolving rapidly and transforming industries...",
+  "featureImageUrl": "aig-image-url",
+  "authorName": "Johnoe",
+  "urlHandle": "future-of-ai",
+  "publishedDate": "2025-02-24T13:46:46.2193014Z",
+  "isVisible": true,
+  "isPublished": true,
+  "categoryId": "86a59b54-90ce-46d9-982e-23635ae8f876"
+}
+###
+
+PUT {{BlogPost.API_HostAddress}}/api/blogpost/c61c1404-7b2f-4b2f-ea0a-08dd712fbf9212fbf92
+Content-Type: application/json
+
+{
+  "title": "The Future of AI - Updated",
+  "shortDescription": "Exploring AI advancements",
+  "content": "AI is rapidly evolving and shaping the future of many industries.",
+  "featureImageUrl": "updated-aig-image-url",
+  "authorName": "Johnoe Updated",
+  "urlHandle": "future-of-ai-updated",
+  "publishedDate": "2025-02-25T13:46:46.2193014Z",
+  "isVisible": true,
+  "isPublished": true,
+  "categoryId": "86a59b54-90ce-46d9-982e-23635ae8f876"
+}
+
+###
+
+
+PUT {{BlogPost.API_HostAddress}}/api/blogpost/c61c1404-7b2f-4b2f-ea0a-08dd712fbf92
+Content-Type: application/json
+
+{
+  "title": "The Future of AI - UpdatedNow",
+  "shortDescription": "Exploring AI advancements",
+  "content": "AI is rapidly evolving and shaping the future of many industries.",
+  "featureImageUrl": "updated-aig-image-url",
+  "authorName": "Johnoe Updated",
+  "urlHandle": "future-of-ai-updated",
+  "publishedDate": "2025-02-25T13:46:46.2193014Z",
+  "isVisible": true,
+  "isPublished": true,
+  "categoryId": "86a59b54-90ce-46d9-982e-23635ae8f876"
+}
+
+###
