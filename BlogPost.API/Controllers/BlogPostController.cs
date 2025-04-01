@@ -165,7 +165,7 @@ namespace BlogPost.API.Controllers
             // If the blog post was not found, return NotFound
             if (!result)
             {
-                return NotFound(new { message = "Blog post not found." });
+                return NotFound(new { message = "Blog post not found. Please Check Again" });
             }
 
             // Return a success message after successful deletion
