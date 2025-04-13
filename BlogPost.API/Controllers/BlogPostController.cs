@@ -79,6 +79,7 @@ namespace BlogPost.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            // Convert DTO to Domain
             var blogPost = new BlogPostT
             {
                 Title = dto.Title,
@@ -96,6 +97,7 @@ namespace BlogPost.API.Controllers
 
             var createdBlogPost = await _blogPostRepository.AddAsync(blogPost);
 
+            //Convert Domain Model back to DTO 
             var response = new BlogPostDTO
             {
                 Id = createdBlogPost.Id,
@@ -134,7 +136,7 @@ namespace BlogPost.API.Controllers
                 return NotFound(new { message = "Blog post not found." });
             }
 
-            // Create the updated BlogPostDTO
+            //Convert Domain Model back to DTO
             var response = new BlogPostDTO
             {
                 Id = updatedBlogPost.Id,
