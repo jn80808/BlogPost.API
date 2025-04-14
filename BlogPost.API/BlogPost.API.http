@@ -125,3 +125,7 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{BlogPost.API_HostAddress}}/api/blogpost
+
+###
