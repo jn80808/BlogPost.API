@@ -25,5 +25,9 @@ namespace BlogPost.API.Model.Domain
         public virtual BlogCategory? Category { get; set; }
 
         public virtual List<Comment>? Comments { get; set; }
+
+        //BloPost that will have collection of Category 
+        public ICollection<BlogCategory> categories { get; set; }
+
     }
 }
