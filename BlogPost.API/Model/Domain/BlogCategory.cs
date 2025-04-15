@@ -15,7 +15,7 @@ namespace BlogPost.API.Model.Domain
 
 
         //BloPost that will have collection of Category 
-        public ICollection<BlogCategory> Categories { get; set; }
+        public ICollection<BlogPostT> BlogPost { get; set; }
 
 
     }
