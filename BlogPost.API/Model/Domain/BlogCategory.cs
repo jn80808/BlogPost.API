@@ -13,8 +13,10 @@ namespace BlogPost.API.Model.Domain
         // Navigation Property
         public virtual List<BlogPostT>? BlogPosts { get; set; }
 
-        //Category that will have collection of BlogPost 
-        public ICollection<BlogPostT> BlogPost { get; set; }
+
+        //BloPost that will have collection of Category 
+        public ICollection<BlogCategory> Categories { get; set; }
+
 
     }
 }

@@ -23,7 +23,10 @@ namespace BlogPostSystem
                 .HasOne(bp => bp.Category)
                 .WithMany(c => c.BlogPosts)
                 .HasForeignKey(bp => bp.CategoryId)
-                .IsRequired(false); // Category is optional
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
 
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.BlogPost)
@@ -31,5 +34,7 @@ namespace BlogPostSystem
                 .HasForeignKey(c => c.BlogPostId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+
+
     }
 }
