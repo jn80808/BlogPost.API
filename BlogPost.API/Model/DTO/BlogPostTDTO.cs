@@ -16,6 +16,8 @@ namespace BlogPost.API.DTOs
         public bool IsPublished { get; set; }
         public Guid? CategoryId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public List<BlogCategoryDTO> Categories { get; set; } = new List<BlogCategoryDTO>();
     }
 
     public class CreateBlogPostDTO
@@ -45,6 +47,10 @@ namespace BlogPost.API.DTOs
         public bool IsVisible { get; set; }
         public bool IsPublished { get; set; }
         public Guid? CategoryId { get; set; }
+
+        public Guid[] Categories { get; set; }
+
+        
     }
 
     public class UpdateBlogPostDTO

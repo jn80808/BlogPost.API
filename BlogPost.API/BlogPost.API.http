@@ -129,3 +129,26 @@ Content-Type: application/json
 GET {{BlogPost.API_HostAddress}}/api/blogpost
 
 ###
+
+POST {{BlogPost.API_HostAddress}}/api/blogpost
+Content-Type: application/json
+
+{
+  "title": "Understanding .NET 5 Features",
+  "shortDescription": "A summary of the latest .NET 8 features.",
+  "content": "In .NET 8, Microsoft introduced several key improvements including performance boosts, native AOT, and more.",
+  "featureImageUrl": "https://example.com/images/dotnet8.png",
+  "authorName": "Joy Ng",
+  "urlHandle": "understanding-dotnet-8",
+  "publishedDate": "2025-04-16T00:00:00Z",
+  "isVisible": true,
+  "isPublished": true,
+  "categoryId": "401D6C65-FEAF-462B-2AC9-08DD5677BB7D",
+  "categories": [
+    "401D6C65-FEAF-462B-2AC9-08DD5677BB7D"
+  ]
+}
+
+
+
+###

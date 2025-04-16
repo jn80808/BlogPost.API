@@ -2,6 +2,7 @@
 using BlogPost.API.DTOs;
 using BlogPost.API.Model.Domain;
 using BlogPost.API.Repositories;
+using BlogPost.API.Repository.Interface;
 
 namespace BlogPost.API.Controllers
 {
@@ -10,11 +11,14 @@ namespace BlogPost.API.Controllers
     public class BlogPostController : ControllerBase
     {
         private readonly IBlogPostRepository _blogPostRepository;
+        private readonly IBlogCategoryRepository _blogCategoryRepository;
 
         // Constructor now accepts IBlogPostRepository instead of DbContext
-        public BlogPostController(IBlogPostRepository blogPostRepository)
+        public BlogPostController(IBlogPostRepository blogPostRepository,
+            IBlogCategoryRepository categoryRepository)
         {
             _blogPostRepository = blogPostRepository;
+            _blogCategoryRepository = categoryRepository;
         }
 
         // GET: api/BlogPost
@@ -92,8 +96,20 @@ namespace BlogPost.API.Controllers
                 IsVisible = dto.IsVisible,
                 IsPublished = dto.IsPublished,
                 CategoryId = dto.CategoryId,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                Categories = new List<BlogCategory>()
             };
+
+            //check the existing of categories then add this category when it saving a new blog post
+            foreach (var categoryGuid in dto.Categories)
+            {
+                var existingCategory = await _blogCategoryRepository.GetByIdAsync(categoryGuid);
+
+                if (existingCategory != null)
+                {
+                    blogPost.Categories.Add(existingCategory);
+                }
+            }
 
             var createdBlogPost = await _blogPostRepository.AddAsync(blogPost);
 
@@ -111,7 +127,13 @@ namespace BlogPost.API.Controllers
                 IsVisible = createdBlogPost.IsVisible,
                 IsPublished = createdBlogPost.IsPublished,
                 CategoryId = createdBlogPost.CategoryId,
-                CreatedAt = createdBlogPost.CreatedAt
+                CreatedAt = createdBlogPost.CreatedAt,
+                Categories = createdBlogPost.Categories.Select(x => new BlogCategoryDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
             };
 
             return CreatedAtAction(nameof(GetBlogPost), new { id = response.Id }, response);
