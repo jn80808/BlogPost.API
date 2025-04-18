@@ -26,6 +26,8 @@ namespace BlogPost.API.Controllers
         public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetBlogPosts()
         {
             var blogPosts = await _blogPostRepository.GetAllAsync();
+
+            //Convert Domain model to DTO 
             var response = blogPosts.Select(bp => new BlogPostDTO
             {
                 Id = bp.Id,
@@ -39,8 +41,14 @@ namespace BlogPost.API.Controllers
                 IsVisible = bp.IsVisible,
                 IsPublished = bp.IsPublished,
                 CategoryId = bp.CategoryId,
-                CreatedAt = bp.CreatedAt
-            }).ToList();
+                CreatedAt = bp.CreatedAt,
+                Categories = bp.Categories.Select(x => new BlogCategoryDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
+            });
 
             return Ok(response);
         }

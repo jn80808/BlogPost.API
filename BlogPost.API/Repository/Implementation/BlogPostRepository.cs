@@ -17,7 +17,7 @@ namespace BlogPost.API.Repositories
 
         public async Task<IEnumerable<BlogPostT>> GetAllAsync()
         {
-            return await _context.BlogPosts.ToListAsync();
+            return await _context.BlogPosts.Include(x => x.Categories).ToListAsync();
         }
 
         public async Task<BlogPostT?> GetByIdAsync(Guid id)

@@ -134,7 +134,7 @@ POST {{BlogPost.API_HostAddress}}/api/blogpost
 Content-Type: application/json
 
 {
-  "title": "Understanding .NET 5 Features",
+  "title": "Understanding .NET ff Features",
   "shortDescription": "A summary of the latest .NET 8 features.",
   "content": "In .NET 8, Microsoft introduced several key improvements including performance boosts, native AOT, and more.",
   "featureImageUrl": "https://example.com/images/dotnet8.png",
@@ -158,7 +158,7 @@ POST {{BlogPost.API_HostAddress}}/api/blogpost
 Content-Type: application/json
 
 {
-  "title": "Understanding .NET 55 Features",
+  "title": "Understanding .NET 5t Features",
   "shortDescription": "A summary of the latest .NET 8 features.",
   "content": "In .NET 8, Microsoft introduced several key improvements including performance boosts, native AOT, and more.",
   "featureImageUrl": "https://example.com/images/dotnet8.png",
@@ -167,10 +167,44 @@ Content-Type: application/json
   "publishedDate": "2025-04-16T00:00:00Z",
   "isVisible": true,
   "isPublished": true,
-  "categoryId": "401D6C65-FEAF-462B-2AC9-08DD5677BB7D",
+  "categoryId": null,
   "categories": [
-    "401D6C65-FEAF-462B-2AC9-08DD5677BB7D"
+    "401D6C65-FEAF-462B-2AC9-08DD5677BB7D",
+    "FCC0A3FB-1136-4704-F0AC-08DD567D7CD6"
   ]
 }
+
+
+###
+
+GET {{BlogPost.API_HostAddress}}/api/blogpost
+
+###
+
+
+GET {{BlogPost.API_HostAddress}}/api/blogpost/2271dd23-d46b-4998-6680-08dd7cf3a62f
+
+###
+
+
+
+
+
+PUT {{BlogPost.API_HostAddress}}/api/blogpost/bebfc4a1-13ec-4386-c9c0-08dd7e66f93a
+Content-Type: application/json
+
+{
+  "title": "Updated Title 1",
+  "shortDescription": "Updated Short Description",
+  "content": "Updated content goes here...",
+  "featureImageUrl": "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BB1msG0V?w=0&h=0&q=60&m=6&f=jpg&u=t",
+  "authorName": "New Author",
+  "urlHandle": "updated-url-handle",
+  "publishedDate": "2025-04-18T14:04:05.02",
+  "isVisible": true,
+  "isPublished": false,
+  "categoryId": "401d6c65-feaf-462b-2ac9-08dd5677bb7d"
+}
+
 
 ###
