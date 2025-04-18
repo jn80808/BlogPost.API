@@ -83,6 +83,14 @@ namespace BlogPost.API.Controllers
                 return BadRequest(ModelState);
             }
 
+
+            var titleExists = await _blogPostRepository.TitleExistsAsync(dto.Title);
+            if (titleExists)
+            {
+                return BadRequest($"A blog post with the title '{dto.Title}' already exists.");
+            }
+
+
             // Convert DTO to Domain
             var blogPost = new BlogPostT
             {

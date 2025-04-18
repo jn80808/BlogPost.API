@@ -32,6 +32,12 @@ namespace BlogPost.API.Repositories
             return blogPost;
         }
 
+        public async Task<bool> TitleExistsAsync(string title)
+        {
+            return await _context.BlogPosts.AnyAsync(bp => bp.Title == title);
+        }
+
+
         public async Task<BlogPostT?> UpdateAsync(Guid id, UpdateBlogPostDTO dto)
         {
             var blogPost = await _context.BlogPosts.FindAsync(id);

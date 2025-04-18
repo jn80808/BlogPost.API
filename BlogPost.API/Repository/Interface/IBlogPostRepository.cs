@@ -10,5 +10,9 @@ namespace BlogPost.API.Repositories
         Task<BlogPostT> AddAsync(BlogPostT blogPost);
         Task<BlogPostT?> UpdateAsync(Guid id, UpdateBlogPostDTO dto);
         Task<bool> DeleteAsync(Guid id);
+
+        Task<bool> TitleExistsAsync(string title);
+
+
     }
 }
