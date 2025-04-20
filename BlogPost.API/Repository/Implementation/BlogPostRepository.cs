@@ -2,6 +2,7 @@
 using BlogPost.API.Model.Domain;
 using BlogPostSystem;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace BlogPost.API.Repositories
 {
@@ -40,23 +41,46 @@ namespace BlogPost.API.Repositories
 
         public async Task<BlogPostT?> UpdateAsync(Guid id, UpdateBlogPostDTO dto)
         {
-            var blogPost = await _context.BlogPosts.FindAsync(id);
-            if (blogPost == null) return null;
+            var existingBlogPost = await _context.BlogPosts
+                .Include(bp => bp.Categories)
+                .FirstOrDefaultAsync(bp => bp.Id == id);
 
-            blogPost.Title = dto.Title;
-            blogPost.ShortDescription = dto.ShortDescription;
-            blogPost.Content = dto.Content;
-            blogPost.FeatureImageUrl = dto.FeatureImageUrl;
-            blogPost.AuthorName = dto.AuthorName;
-            blogPost.UrlHandle = dto.UrlHandle;
-            blogPost.PublishedDate = dto.PublishedDate;
-            blogPost.IsVisible = dto.IsVisible;
-            blogPost.IsPublished = dto.IsPublished;
-            blogPost.CategoryId = dto.CategoryId;
+            if (existingBlogPost == null)
+            {
+                return null;
+            }
+
+            // Update scalar properties
+            existingBlogPost.Title = dto.Title;
+            existingBlogPost.ShortDescription = dto.ShortDescription;
+            existingBlogPost.Content = dto.Content;
+            existingBlogPost.FeatureImageUrl = dto.FeatureImageUrl;
+            existingBlogPost.AuthorName = dto.AuthorName;
+            existingBlogPost.UrlHandle = dto.UrlHandle;
+            existingBlogPost.PublishedDate = dto.PublishedDate;
+            existingBlogPost.IsVisible = dto.IsVisible;
+            existingBlogPost.IsPublished = dto.IsPublished;
+            existingBlogPost.CategoryId = dto.CategoryId;
+
+
+            // Clear existing categories
+            existingBlogPost.Categories?.Clear();
+
+            // Re-assign categories based on IDs in dto
+            if (dto.Categories != null && dto.Categories.Count > 0)
+            {
+                var validCategories = await _context.Categories
+                    .Where(c => dto.Categories.Contains(c.Id))
+                    .ToListAsync();
+
+                existingBlogPost.Categories = validCategories;
+            }
 
             await _context.SaveChangesAsync();
-            return blogPost;
+
+            return existingBlogPost;
         }
+
 
         public async Task<bool> DeleteAsync(Guid id)
         {

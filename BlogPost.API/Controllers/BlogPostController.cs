@@ -3,6 +3,7 @@ using BlogPost.API.DTOs;
 using BlogPost.API.Model.Domain;
 using BlogPost.API.Repositories;
 using BlogPost.API.Repository.Interface;
+using BlogPost.API.Repository.Implementation;
 
 namespace BlogPost.API.Controllers
 {
@@ -157,24 +158,20 @@ namespace BlogPost.API.Controllers
 
         // PUT: api/BlogPost/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBlogPost([FromRoute]  Guid id, [FromBody] UpdateBlogPostDTO dto)
+        public async Task<IActionResult> UpdateBlogPost([FromRoute] Guid id, [FromBody] UpdateBlogPostDTO dto)
         {
-            // Check if the model state is valid
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Call the repository to update the blog post
             var updatedBlogPost = await _blogPostRepository.UpdateAsync(id, dto);
 
-            // If the blog post wasn't found, return NotFound
             if (updatedBlogPost == null)
             {
                 return NotFound(new { message = "Blog post not found." });
             }
 
-            //Convert Domain Model back to DTO
             var response = new BlogPostDTO
             {
                 Id = updatedBlogPost.Id,
@@ -188,12 +185,18 @@ namespace BlogPost.API.Controllers
                 IsVisible = updatedBlogPost.IsVisible,
                 IsPublished = updatedBlogPost.IsPublished,
                 CategoryId = updatedBlogPost.CategoryId,
-                CreatedAt = updatedBlogPost.CreatedAt
+                CreatedAt = updatedBlogPost.CreatedAt,
+                Categories = updatedBlogPost.Categories.Select(x => new BlogCategoryDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
             };
 
-            // Return a success message along with the updated data
             return Ok(new { message = "Successfully updated", response });
         }
+
 
         // DELETE: api/BlogPost/{id}
         [HttpDelete("{id}")]

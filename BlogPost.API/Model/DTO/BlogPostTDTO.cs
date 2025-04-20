@@ -80,5 +80,8 @@ namespace BlogPost.API.DTOs
         public bool IsVisible { get; set; }
         public bool IsPublished { get; set; }
         public Guid? CategoryId { get; set; }
+
+        public List<Guid> Categories { get; set; } = new List<Guid>();
+
     }
 }
