@@ -12,10 +12,12 @@ builder.Services.AddDbContext<BlogPostDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 
 //Added Repository 
 builder.Services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 
 var app = builder.Build();

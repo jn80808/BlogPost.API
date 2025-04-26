@@ -1,6 +1,6 @@
-﻿namespace BlogPost.API.Model.Domain
+﻿namespace BlogPost.API.Model.DTO
 {
-    public class BlogImage
+    public class BlogImageDTO
     {
         public Guid Id { get; set; }
 
