@@ -1,6 +1,7 @@
 ﻿using BlogPost.API.Model.Domain;
 using BlogPost.API.Repository.Interface;
 using BlogPostSystem;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 
 namespace BlogPost.API.Repository.Implementation
@@ -19,6 +20,13 @@ namespace BlogPost.API.Repository.Implementation
             this.httpContextAccessor = httpContextAccessor;
             this.dbContext = dbContext;
         }
+
+
+        public async Task<IEnumerable<BlogImage>> GetAll()
+        {
+            return await dbContext.BlogImage.ToListAsync();
+        }
+
 
 
         public async Task<BlogImage> Upload(IFormFile file, BlogImage blogImage)

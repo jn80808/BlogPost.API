@@ -17,6 +17,30 @@ namespace BlogPost.API.Controllers
             this.imageRepository = imageRepository;
         }
 
+        //GET:  {apibaseUrl}/api/images 
+        [HttpGet]
+         public async Task<IActionResult> GetAllImages()
+        {
+            //call image repository to get all image 
+            var images = await imageRepository.GetAll();
+
+            //Convert Domain model to DTO 
+            var response = new List<BlogImageDTO>();
+            foreach (var image in images)
+            {
+                response.Add(new BlogImageDTO
+                {
+                    Id = image.Id,
+                    FileName = image.FileName,
+                    Title = image.Title,
+                    DateCreated = image.DateCreated,
+                    FileExtension = image.FileExtension,
+                    Url = image.Url
+                });
+            }
+            return Ok(response);
+        }
+
 
         //POST : {apibaseUrl}/api/images 
         [HttpPost]
