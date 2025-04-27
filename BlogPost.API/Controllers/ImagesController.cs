@@ -43,6 +43,7 @@ namespace BlogPost.API.Controllers
                 var response = new BlogImageDTO
                 {
                     Id = blogImage.Id,
+                    FileName = blogImage.FileName,
                     Title = blogImage.Title,
                     DateCreated = blogImage.DateCreated,
                     FileExtension = blogImage.FileExtension,
@@ -61,7 +62,7 @@ namespace BlogPost.API.Controllers
 
         private void ValidateFileUpload(IFormFile file)
         {
-            var allowedExtensions = new string[] { ".jpeg",".jpg",".png" };
+            var allowedExtensions = new string[] { ".jpeg",".jpg",".png",".pdf" };
 
             if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower())) 
             {
