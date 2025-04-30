@@ -7,6 +7,7 @@ namespace BlogPost.API.Repositories
     {
         Task<IEnumerable<BlogPostT>> GetAllAsync();
         Task<BlogPostT?> GetByIdAsync(Guid id);
+        Task<BlogPostT?> GetByUrlHandleAsync(string urlHandle);
         Task<BlogPostT> AddAsync(BlogPostT blogPost);
         Task<BlogPostT?> UpdateAsync(Guid id, UpdateBlogPostDTO dto);
         Task<bool> DeleteAsync(Guid id);

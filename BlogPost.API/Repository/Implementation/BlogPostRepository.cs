@@ -91,5 +91,14 @@ namespace BlogPost.API.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<BlogPostT?> GetByUrlHandleAsync(string urlHandle)
+        {
+            return await _context.BlogPosts
+                .Include(x => x.Categories)
+                .FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
+        }
+
+
     }
 }

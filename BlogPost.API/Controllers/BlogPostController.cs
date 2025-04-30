@@ -54,6 +54,38 @@ namespace BlogPost.API.Controllers
             return Ok(response);
         }
 
+
+        // GET: api/BlogPost/by-url/{urlHandle}   <- Change route to avoid ambiguity
+        [HttpGet("by-url/{urlHandle}")]
+        public async Task<IActionResult> GetBlogPostByUrlHandle([FromRoute] string urlHandle)
+        {
+            var blogPost = await _blogPostRepository.GetByUrlHandleAsync(urlHandle);
+
+            if (blogPost == null)
+            {
+                return NotFound(new { message = "Blog post not found." });
+            }
+
+            var response = new BlogPostDTO
+            {
+                Id = blogPost.Id,
+                Title = blogPost.Title,
+                ShortDescription = blogPost.ShortDescription,
+                Content = blogPost.Content,
+                FeatureImageUrl = blogPost.FeatureImageUrl,
+                AuthorName = blogPost.AuthorName,
+                UrlHandle = blogPost.UrlHandle,
+                PublishedDate = blogPost.PublishedDate,
+                IsVisible = blogPost.IsVisible,
+                IsPublished = blogPost.IsPublished,
+                CategoryId = blogPost.CategoryId,
+                CreatedAt = blogPost.CreatedAt
+            };
+
+            return Ok(response);
+        }
+
+
         // GET: api/BlogPost/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogPostDTO>> GetBlogPost([FromRoute] Guid id)

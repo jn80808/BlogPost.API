@@ -244,3 +244,9 @@ DELETE {{BlogPost.API_HostAddress}}/api/blogpost/2271dd23-d46b-4998-6680-08dd7cf
 DELETE {{BlogPost.API_HostAddress}}/api/blogpost/2271dd23-d46b-4998-6680-08dd7cf3a62f
 
 ###
+
+
+
+GET {{BlogPost.API_HostAddress}}/api/blogpost/by-url/Green-Tea
+
+###
