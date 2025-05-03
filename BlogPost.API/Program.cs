@@ -1,14 +1,21 @@
+using BlogPost.API.Data;
 using BlogPost.API.Repositories;
 using BlogPost.API.Repository.Implementation;
 using BlogPost.API.Repository.Interface;
-using BlogPostSystem;  
+using BlogPostSystem;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<BlogPostDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("BlogPostConnectionStrings")));
+   options.UseSqlServer(builder.Configuration.GetConnectionString("BlogPostConnectionStrings")));
+
+builder.Services.AddDbContext<AuthDbContext>(options =>
+   options.UseSqlServer(builder.Configuration.GetConnectionString("BlogPostConnectionStrings")));
+
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -19,6 +26,13 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
+
+
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("beantea")
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
 
 
 var app = builder.Build();
