@@ -5,6 +5,7 @@ using BlogPost.API.Repository.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlogPost.API.Model.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPost.API.Controllers
 {
@@ -21,6 +22,7 @@ namespace BlogPost.API.Controllers
 
         // GET: api/BlogCategory
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories()
         {
             var categories = await _blogCategoryRepository.GetAllAsync();
