@@ -265,11 +265,3 @@ Content-Type: application/json
 
 ###
 
-POST {{BlogPost.API_HostAddress}}/api/auth/register
-Content-Type: application/json
-
-{
-  //RegisterRequestDto
-}
-
-###

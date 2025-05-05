@@ -12,7 +12,6 @@ namespace BlogPost.API.Data
 
 
         }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -20,68 +19,49 @@ namespace BlogPost.API.Data
             var readerRoleId = "1eedb526-e85b-4698-8ba8-574d3a102912";
             var writerRoleId = "8ba1f632-fd13-4a47-9f4a-eb630545f713";
 
-            //Create Reader and Writer Role 
-            var roles = new List<IdentityRole> {
-
-                new IdentityRole()
+            var roles = new List<IdentityRole>
+            {
+                new IdentityRole
                 {
                     Id = readerRoleId,
                     Name = "Reader",
-                    NormalizedName = "Reader".ToUpper(),
+                    NormalizedName = "READER",
                     ConcurrencyStamp = readerRoleId
                 },
-                new IdentityRole()
+                new IdentityRole
                 {
                     Id = writerRoleId,
                     Name = "Writer",
-                    NormalizedName = "Writer".ToUpper(),
+                    NormalizedName = "WRITER",
                     ConcurrencyStamp = writerRoleId
                 }
-
             };
 
-            //Seed the role for Reader & Writer
             builder.Entity<IdentityRole>().HasData(roles);
 
-            //Create an Admin User 
+            // Admin user seeding
             var adminUserId = "2997c46b-3629-4930-babe-628b9fccc01b";
-            var admin = new IdentityUser()
+            var admin = new IdentityUser
             {
                 Id = adminUserId,
                 UserName = "admin@beantea.com",
                 Email = "admin@beantea.com",
-                NormalizedEmail = "admin@beantea.com".ToUpper(),
-                NormalizedUserName = "admin@beante.com".ToUpper()
-
+                NormalizedEmail = "ADMIN@BEANTEA.COM",
+                NormalizedUserName = "ADMIN@BEANTEA.COM"
             };
 
             admin.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(admin, "Admin@123");
 
-            //Seed the role for Admin 
-            builder.Entity<IdentityRole>().HasData(admin);
+            builder.Entity<IdentityUser>().HasData(admin); 
 
-
-            //Give Role To Admin 
-            var adminRoles = new List<IdentityUserRole<string>>()
+            // Assign Reader and Writer roles to Admin
+            var adminRoles = new List<IdentityUserRole<string>>
             {
-                new ()
-                {
-                    UserId = adminUserId,
-                    RoleId = readerRoleId,
-
-                },
-                new ()
-                {
-                    UserId = adminUserId,
-                    RoleId = writerRoleId,
-
-                }
+                new IdentityUserRole<string> { UserId = adminUserId, RoleId = readerRoleId },
+                new IdentityUserRole<string> { UserId = adminUserId, RoleId = writerRoleId }
             };
 
             builder.Entity<IdentityUserRole<string>>().HasData(adminRoles);
-
         }
-        
-
     }
 }
