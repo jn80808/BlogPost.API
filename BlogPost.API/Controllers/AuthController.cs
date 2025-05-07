@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using Microsoft.Win32;
 
 namespace BlogPost.API.Controllers
@@ -17,22 +18,57 @@ namespace BlogPost.API.Controllers
             this.userManager = userManager;
         }
 
+        //POST:{apibaseurl}/api/auth/login 
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> logIn([FromBody] LogInRequestsDto requestDtoLogIn)
+        {
+
+            //check Email 
+            var identityUser =  await userManager.FindByEmailAsync(requestDtoLogIn.Email);
+
+            if (identityUser == null)
+            {
+                //checkPassword 
+                var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser, requestDtoLogIn.Password);
+
+
+                if (checkPasswordResult)
+                {
+                    //Create a Token and Response 
+
+
+                }
+            }
+
+            ModelState.AddModelError("", "Email or Password Incorrect");
+
+            return ValidationProblem(ModelState);
+
+
+            
+        }
+
+
+
+
+
         //POST: {apibaseurl}/api/auth/register
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestDto requestDto)
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto requestDtoRegister)
         {
             //Create IdentityUser object 
 
             var user = new IdentityUser
             {
-                UserName = requestDto.Email?.Trim(),
-                Email = requestDto.Email?.Trim()
+                UserName = requestDtoRegister.Email?.Trim(),
+                Email = requestDtoRegister.Email?.Trim()
             };
 
 
             //Create User
-            var identityResult = await userManager.CreateAsync(user, requestDto.Password);
+            var identityResult = await userManager.CreateAsync(user, requestDtoRegister.Password);
 
             if (identityResult.Succeeded)
             {
