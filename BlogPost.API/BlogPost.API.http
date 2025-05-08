@@ -265,3 +265,26 @@ Content-Type: application/json
 
 ###
 
+
+
+
+POST {{BlogPost.API_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+   "email": "JN@gmail.com",
+  "password": "JNNNNNNNNN@123"
+}
+
+###
+
+
+POST {{BlogPost.API_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+   "email": "maganda@gmail.cpm",
+  "password":"Maganda@123"
+}
+
+###

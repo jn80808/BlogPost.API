@@ -1,4 +1,5 @@
-﻿using BlogPost.API.Model.DTO;
+﻿using Azure;
+using BlogPost.API.Model.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,31 +24,32 @@ namespace BlogPost.API.Controllers
         [Route("login")]
         public async Task<IActionResult> logIn([FromBody] LogInRequestsDto requestDtoLogIn)
         {
+            //check email 
+            var identityUser = await userManager.FindByEmailAsync(requestDtoLogIn.Email);
 
-            //check Email 
-            var identityUser =  await userManager.FindByEmailAsync(requestDtoLogIn.Email);
-
-            if (identityUser == null)
+            if (identityUser != null)
             {
-                //checkPassword 
                 var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser, requestDtoLogIn.Password);
-
 
                 if (checkPasswordResult)
                 {
-                    //Create a Token and Response 
+                    var roles = await userManager.GetRolesAsync(identityUser);
 
+                    var logInresponse = new LogInResponseDto()
+                    {
+                        Email = requestDtoLogIn.Email,
+                        Roles = roles.ToList(),
+                        Token = "TOKEN" // Replace this with actual token generation logic
+                    };
 
+                    return Ok(logInresponse);
                 }
             }
 
             ModelState.AddModelError("", "Email or Password Incorrect");
-
             return ValidationProblem(ModelState);
-
-
-            
         }
+
 
 
 
