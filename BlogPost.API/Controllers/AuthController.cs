@@ -1,5 +1,6 @@
 ﻿using Azure;
 using BlogPost.API.Model.DTO;
+using BlogPost.API.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,13 @@ namespace BlogPost.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
+        private readonly ITokenRepository tokenrepository;
 
-        public AuthController(UserManager<IdentityUser> userManager)
+        public AuthController(UserManager<IdentityUser> userManager,
+            ITokenRepository tokenrepository)
         {
             this.userManager = userManager;
+            this.tokenrepository = tokenrepository;
         }
 
         //POST:{apibaseurl}/api/auth/login 
@@ -36,12 +40,13 @@ namespace BlogPost.API.Controllers
                     var roles = await userManager.GetRolesAsync(identityUser);
 
                     //Create Token and Response
+                    var jwtToken = tokenrepository.CreateJwtToken(identityUser, roles.ToList());
 
                     var logInresponse = new LogInResponseDto()
                     {
                         Email = requestDtoLogIn.Email,
                         Roles = roles.ToList(),
-                        Token = "TOKEN" // Replace this with actual token generation logic
+                        Token = jwtToken
                     };
 
                     return Ok(logInresponse);
