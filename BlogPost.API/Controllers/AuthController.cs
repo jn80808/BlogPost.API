@@ -35,6 +35,8 @@ namespace BlogPost.API.Controllers
                 {
                     var roles = await userManager.GetRolesAsync(identityUser);
 
+                    //Create Token and Response
+
                     var logInresponse = new LogInResponseDto()
                     {
                         Email = requestDtoLogIn.Email,
