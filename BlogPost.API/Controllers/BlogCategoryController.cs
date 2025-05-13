@@ -22,7 +22,6 @@ namespace BlogPost.API.Controllers
 
         // GET: api/BlogCategory
         [HttpGet]
-        [Authorize(Roles ="Writer")]
         public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories()
         {
             var categories = await _blogCategoryRepository.GetAllAsync();
@@ -66,6 +65,7 @@ namespace BlogPost.API.Controllers
 
         // POST: api/BlogCategory
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult<CreateCategoryReturnDto>> CreateCategory([FromBody] CreateBlogCategoryDTO createBlogCategoryDTO)
         {
             if (!ModelState.IsValid)
@@ -105,7 +105,8 @@ namespace BlogPost.API.Controllers
 
 
         // PUT: api/BlogCategory/{id}
-        [HttpPut("{id:Guid}")] // Correcting the route definition
+        [HttpPut("{id:Guid}")] 
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult<BlogCategoryDTO>> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateBlogCategoryDTO updateBlogCategoryDTO)
         {
             if (id != updateBlogCategoryDTO.Id)
@@ -146,6 +147,7 @@ namespace BlogPost.API.Controllers
 
         // DELETE: api/BlogCategory/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult> DeleteCategory([FromRoute] Guid id)
         {
             var isDeleted = await _blogCategoryRepository.DeleteAsync(id);

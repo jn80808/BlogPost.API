@@ -4,6 +4,7 @@ using BlogPost.API.Model.Domain;
 using BlogPost.API.Repositories;
 using BlogPost.API.Repository.Interface;
 using BlogPost.API.Repository.Implementation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPost.API.Controllers
 {
@@ -117,6 +118,7 @@ namespace BlogPost.API.Controllers
 
         // POST: api/BlogPost
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult<BlogPostDTO>> CreateBlogPost([FromBody] CreateBlogPostDTO dto)
         {
             if (!ModelState.IsValid)
@@ -190,6 +192,7 @@ namespace BlogPost.API.Controllers
 
         // PUT: api/BlogPost/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateBlogPost([FromRoute] Guid id, [FromBody] UpdateBlogPostDTO dto)
         {
             if (!ModelState.IsValid)
@@ -232,6 +235,7 @@ namespace BlogPost.API.Controllers
 
         // DELETE: api/BlogPost/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
         {
             // Call the repository to delete the blog post
