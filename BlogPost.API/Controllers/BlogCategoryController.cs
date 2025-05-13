@@ -22,7 +22,7 @@ namespace BlogPost.API.Controllers
 
         // GET: api/BlogCategory
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles ="Writer")]
         public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories()
         {
             var categories = await _blogCategoryRepository.GetAllAsync();
