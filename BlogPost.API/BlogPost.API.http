@@ -272,7 +272,7 @@ POST {{BlogPost.API_HostAddress}}/api/auth/register
 Content-Type: application/json
 
 {
-   "email": "JN@gmail.com",
+   "email": "joyowowoo123@gmail.com",
   "password": "JNNNNNNNNN@123"
 }
 
@@ -289,3 +289,7 @@ Content-Type: application/json
 
 ###
 
+
+GET {{BlogPost.API_HostAddress}}/api/blogpost/by-url/Oolong-Tea
+
+###
