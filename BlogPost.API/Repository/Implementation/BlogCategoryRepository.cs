@@ -17,9 +17,29 @@ namespace BlogPost.API.Repository.Implementation
             this.dbcontext = dbcontext;
         }
 
-        public async Task<IEnumerable<BlogCategory>> GetAllAsync() 
+        public async Task<IEnumerable<BlogCategory>> GetAllAsync(string? query = null) 
         {
-            return await dbcontext.Categories.ToListAsync();
+            //Querry 
+            var categories = dbcontext.Categories.AsQueryable();
+
+            //Filtering 
+            if (string.IsNullOrWhiteSpace(query) == false)
+            {
+                categories = categories.Where(x => x.Name.Contains(query, StringComparison.OrdinalIgnoreCase));
+            }
+
+
+            //Sorting 
+
+
+            //Pagination 
+
+            return await categories.ToListAsync();
+
+
+
+            //return await dbcontext.Categories.ToListAsync();
+
         }
 
         public async Task<BlogCategory?> GetByIdAsync(Guid id) 

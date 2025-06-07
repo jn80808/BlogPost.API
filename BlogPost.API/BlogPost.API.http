@@ -293,3 +293,7 @@ Content-Type: application/json
 GET {{BlogPost.API_HostAddress}}/api/blogpost/by-url/Oolong-Tea
 
 ###
+
+GET {{BlogPost.API_HostAddress}}/api/blogcategory
+
+###

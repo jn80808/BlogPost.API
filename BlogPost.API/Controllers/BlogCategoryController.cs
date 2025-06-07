@@ -20,11 +20,11 @@ namespace BlogPost.API.Controllers
             _blogCategoryRepository = blogCategoryRepository;
         }
 
-        // GET: api/BlogCategory
+        // GET: api/BlogCategory?query=html
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories([FromQuery] string? query)
         {
-            var categories = await _blogCategoryRepository.GetAllAsync();
+            var categories = await _blogCategoryRepository.GetAllAsync(query);
             if (!categories.Any())
             {
                 return NotFound(new { message = "No categories found." });
