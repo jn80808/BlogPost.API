@@ -25,7 +25,7 @@ namespace BlogPost.API.Repository.Implementation
             //Filtering 
             if (string.IsNullOrWhiteSpace(query) == false)
             {
-                categories = categories.Where(x => x.Name.Contains(query, StringComparison.OrdinalIgnoreCase));
+                categories = categories.Where(x => x.Name.Contains(query));
             }
 
 

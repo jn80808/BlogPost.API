@@ -65,7 +65,7 @@ namespace BlogPost.API.Controllers
 
         // POST: api/BlogCategory
         [HttpPost]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task<ActionResult<CreateCategoryReturnDto>> CreateCategory([FromBody] CreateBlogCategoryDTO createBlogCategoryDTO)
         {
             if (!ModelState.IsValid)
