@@ -16,9 +16,28 @@ namespace BlogPost.API.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<BlogPostT>> GetAllAsync()
+        public async Task<IEnumerable<BlogPostT>> GetAllAsync(string? query = null)
         {
-            return await _context.BlogPosts.Include(x => x.Categories).ToListAsync();
+            // Start with all blog posts and include categories
+            var blogPostsQuery = _context.BlogPosts
+                .Include(x => x.Categories)
+                .AsQueryable();
+
+            // Filtering by query - example: match title or content
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                blogPostsQuery = blogPostsQuery.Where(bp =>
+                    bp.Title.Contains(query) ||
+                    bp.ShortDescription.Contains(query) ||
+                    bp.Content.Contains(query) ||
+                    bp.Categories.Any(c => c.Name.Contains(query))
+                );
+            }
+
+            return await blogPostsQuery.ToListAsync();
+
+
+            //return await _context.BlogPosts.Include(x => x.Categories).ToListAsync();
         }
 
         public async Task<BlogPostT?> GetByIdAsync(Guid id)

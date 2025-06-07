@@ -23,11 +23,11 @@ namespace BlogPost.API.Controllers
             _blogCategoryRepository = categoryRepository;
         }
 
-        // GET: api/BlogPost
+        // GET: api/BlogPost?query=categoryName
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetBlogPosts()
+        public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetBlogPosts([FromQuery] string? query)
         {
-            var blogPosts = await _blogPostRepository.GetAllAsync();
+            var blogPosts = await _blogPostRepository.GetAllAsync(query);
 
             //Convert Domain model to DTO 
             var response = blogPosts.Select(bp => new BlogPostDTO

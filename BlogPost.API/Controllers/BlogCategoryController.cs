@@ -20,7 +20,7 @@ namespace BlogPost.API.Controllers
             _blogCategoryRepository = blogCategoryRepository;
         }
 
-        // GET: api/BlogCategory?query=html
+        // GET: api/BlogCategory?query=categoryName
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories([FromQuery] string? query)
         {

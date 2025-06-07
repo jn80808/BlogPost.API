@@ -297,3 +297,7 @@ GET {{BlogPost.API_HostAddress}}/api/blogpost/by-url/Oolong-Tea
 GET {{BlogPost.API_HostAddress}}/api/blogcategory
 
 ###
+
+GET {{BlogPost.API_HostAddress}}/api/blogpost
+
+###
