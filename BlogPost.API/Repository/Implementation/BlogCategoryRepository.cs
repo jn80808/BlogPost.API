@@ -17,7 +17,7 @@ namespace BlogPost.API.Repository.Implementation
             this.dbcontext = dbcontext;
         }
 
-        public async Task<IEnumerable<BlogCategory>> GetAllAsync(string? query = null) 
+        public async Task<IEnumerable<BlogCategory>> GetAllAsync(string? query = null, string? sortBy = null, string? sortDirection = null) 
         {
             //Querry 
             var categories = dbcontext.Categories.AsQueryable();
@@ -28,9 +28,14 @@ namespace BlogPost.API.Repository.Implementation
                 categories = categories.Where(x => x.Name.Contains(query));
             }
 
-
             //Sorting 
-
+            if (string.IsNullOrWhiteSpace(sortBy) == false) 
+            {      
+                if(string.Equals(sortBy,"Name",StringComparison.OrdinalIgnoreCase))
+                {
+                    var isAsc = string.Equals(sortDirection,"asc", StringComparison.OrdinalIgnoreCase)? true: false;
+                }
+            }
 
             //Pagination 
 

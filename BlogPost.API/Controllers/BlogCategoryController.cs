@@ -20,9 +20,12 @@ namespace BlogPost.API.Controllers
             _blogCategoryRepository = blogCategoryRepository;
         }
 
-        // GET: api/BlogCategory?query=categoryName
+        // GET: api/BlogCategory?query=categoryName&sortBy=name&sortDirection=desc
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories([FromQuery] string? query)
+        public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories([FromQuery] string? query,
+            [FromQuery] string? sortBy,
+            [FromQuery] string? sortDirection
+            )
         {
             var categories = await _blogCategoryRepository.GetAllAsync(query);
             if (!categories.Any())

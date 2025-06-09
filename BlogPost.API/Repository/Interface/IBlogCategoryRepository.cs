@@ -4,7 +4,7 @@ namespace BlogPost.API.Repository.Interface
 {
     public interface IBlogCategoryRepository
     {
-        Task<IEnumerable<BlogCategory>> GetAllAsync(string? query = null);
+        Task<IEnumerable<BlogCategory>> GetAllAsync(string? query = null, string? sortBy = null, string? sortDirection = null );
         Task<BlogCategory?> GetByIdAsync(Guid id);
         Task<BlogCategory> CreateAsync(BlogCategory category);
         Task<BlogCategory?> UpdateAsync(BlogCategory category);
