@@ -27,7 +27,7 @@ namespace BlogPost.API.Controllers
             [FromQuery] string? sortDirection
             )
         {
-            var categories = await _blogCategoryRepository.GetAllAsync(query);
+            var categories = await _blogCategoryRepository.GetAllAsync(query, sortBy, sortDirection);
             if (!categories.Any())
             {
                 return NotFound(new { message = "No categories found." });

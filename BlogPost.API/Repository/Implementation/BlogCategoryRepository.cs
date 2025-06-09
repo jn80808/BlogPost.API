@@ -34,6 +34,18 @@ namespace BlogPost.API.Repository.Implementation
                 if(string.Equals(sortBy,"Name",StringComparison.OrdinalIgnoreCase))
                 {
                     var isAsc = string.Equals(sortDirection,"asc", StringComparison.OrdinalIgnoreCase)? true: false;
+
+                    categories = isAsc ? categories.OrderBy(x => x.Name) : categories.OrderByDescending(x => x.Name);
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                if (string.Equals(sortBy, "UrlHandle", StringComparison.OrdinalIgnoreCase))
+                {
+                    var isAsc = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
+
+                    categories = isAsc ? categories.OrderBy(x => x.UrlHandle) : categories.OrderByDescending(x => x.UrlHandle);
                 }
             }
 
