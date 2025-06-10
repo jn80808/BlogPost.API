@@ -37,7 +37,7 @@ namespace BlogPost.API.Repositories
             //Sorting 
             if (string.IsNullOrWhiteSpace(sortBy) == false)
             {
-                if (string.Equals(sortBy, "Name", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(sortBy, "Title", StringComparison.OrdinalIgnoreCase))
                 {
                     var isAsc = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
 
