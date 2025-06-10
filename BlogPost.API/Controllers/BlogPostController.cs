@@ -23,11 +23,14 @@ namespace BlogPost.API.Controllers
             _blogCategoryRepository = categoryRepository;
         }
 
-        // GET: api/BlogPost?query=categoryName
+        // GET: api/BlogPost?query=BlogPostName&sortBy=name&sortDirection=desc
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetBlogPosts([FromQuery] string? query)
+        public async Task<ActionResult<IEnumerable<BlogPostDTO>>> GetBlogPosts([FromQuery] string? query,
+            [FromQuery] string? sortBy,
+            [FromQuery] string? sortDirection
+            )
         {
-            var blogPosts = await _blogPostRepository.GetAllAsync(query);
+            var blogPosts = await _blogPostRepository.GetAllAsync(query, sortBy, sortDirection);
 
             //Convert Domain model to DTO 
             var response = blogPosts.Select(bp => new BlogPostDTO

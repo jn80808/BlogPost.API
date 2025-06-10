@@ -16,7 +16,7 @@ namespace BlogPost.API.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<BlogPostT>> GetAllAsync(string? query = null)
+        public async Task<IEnumerable<BlogPostT>> GetAllAsync(string? query = null, string? sortBy = null, string? sortDirection = null)
         {
             // Start with all blog posts and include categories
             var blogPostsQuery = _context.BlogPosts
@@ -33,6 +33,29 @@ namespace BlogPost.API.Repositories
                     bp.Categories.Any(c => c.Name.Contains(query))
                 );
             }
+
+            //Sorting 
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                if (string.Equals(sortBy, "Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    var isAsc = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
+
+                    blogPostsQuery = isAsc ? blogPostsQuery.OrderBy(x => x.Title ) : blogPostsQuery.OrderByDescending(x => x.Title);
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                if (string.Equals(sortBy, "UrlHandle", StringComparison.OrdinalIgnoreCase))
+                {
+                    var isAsc = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
+
+                    blogPostsQuery = isAsc ? blogPostsQuery.OrderBy(x => x.UrlHandle) : blogPostsQuery.OrderByDescending(x => x.UrlHandle);
+                }
+            }
+
+
 
             return await blogPostsQuery.ToListAsync();
 
