@@ -47,11 +47,13 @@ namespace BlogPost.API.Repositories
 
             if (string.IsNullOrWhiteSpace(sortBy) == false)
             {
-                if (string.Equals(sortBy, "UrlHandle", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(sortBy, "Author", StringComparison.OrdinalIgnoreCase))
                 {
                     var isAsc = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
 
-                    blogPostsQuery = isAsc ? blogPostsQuery.OrderBy(x => x.UrlHandle) : blogPostsQuery.OrderByDescending(x => x.UrlHandle);
+                    blogPostsQuery = isAsc
+                             ? blogPostsQuery.OrderBy(x => x.AuthorName)
+                             : blogPostsQuery.OrderByDescending(x => x.AuthorName);
                 }
             }
 
