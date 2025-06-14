@@ -22,12 +22,15 @@ namespace BlogPost.API.Controllers
 
         // GET: api/BlogCategory?query=categoryName&sortBy=name&sortDirection=desc
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories([FromQuery] string? query,
+        public async Task<ActionResult<IEnumerable<BlogCategoryDTO>>> GetCategories(
+            [FromQuery] string? query,
             [FromQuery] string? sortBy,
-            [FromQuery] string? sortDirection
+            [FromQuery] string? sortDirection,
+            [FromQuery] int?    pageNumber,
+            [FromQuery] int?    pageSize
             )
         {
-            var categories = await _blogCategoryRepository.GetAllAsync(query, sortBy, sortDirection);
+            var categories = await _blogCategoryRepository.GetAllAsync(query, sortBy, sortDirection, pageNumber, pageSize);
             if (!categories.Any())
             {
                 return NotFound(new { message = "No categories found." });
